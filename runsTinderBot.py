@@ -1,5 +1,7 @@
 import tkinter as tk
 from  tinderBot import *
+import uuid 
+from PIL import Image
 class LoginWindow:
     def __init__(self): 
         self.login = ''
@@ -53,7 +55,16 @@ class LoginWindow:
             self.loginWindow.destroy()       
     def cancelButtonWasClicked(self):
         self.loginWindow.destroy()
-        
+
+
+def getProfileImages():
+    tinderBot = TinderBot('paoDeQueijoSobreRodas@gmail.com','paodequeijo2014')
+    profileImage = tinderBot.getProfileImage()
+    pathToSaveImage = '../imagesForTrainingCNN/' + str(uuid.uuid1())  + '.jpg'
+    profileImage.save(pathToSaveImage)
+    
+
+
 def main():
     # loginWindow = LoginWindow()
     # print(loginWindow.login)
@@ -62,6 +73,8 @@ def main():
     #     print('Process canceled, ending the activities...')
     # else :
     #     tinderBot = TinderBot(loginWindow.login,loginWindow.password)
-    tinderBot = TinderBot('filipemourao16@gmail.com','loginWindow.password')
+    # tinderBot = TinderBot('paoDeQueijoSobreRodas@gmail.com','paodequeijo2014')
+    getProfileImages()
+ 
 if __name__ == "__main__":
     main()
