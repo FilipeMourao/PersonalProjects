@@ -13,7 +13,7 @@ class TinderBot():
         self.driver = webdriver.Chrome()
         self.driver.maximize_window()
         self.driver.get("http://www.tinder.com")
-        self.waitTime = 15 # 15 seconds to wait the page load
+        self.waitTime = 30 # 15 seconds to wait the page load
         self.makeLogin(email,password)
         print('login sucessful')
     def waitElementToLoadAndClickByXPATH(self,XPATH):
@@ -61,9 +61,20 @@ class TinderBot():
             self.driver.switch_to_window(tinderNormalWindow)
 
     def like(self):
-         self.waitElementToLoadAndClickByXPATH('//*[@id="content"]/div/div[1]/div/div/main/div/div[1]/div/div[2]/div[4]/button')
+         self.waitElementToLoadAndClickByXPATH('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[4]/button')
     def dislike(self):
-        self.waitElementToLoadAndClickByXPATH('//*[@id="content"]/div/div[1]/div/div/main/div/div[1]/div/div[2]/div[2]/button')
+        self.waitElementToLoadAndClickByXPATH('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[2]/button')
+   
+    def closeUndermediateWindows(self):
+        popPupWindows = [ '//*[@id="modal-manager"]/div/div/div[2]/button[2]']
+        for popPupWindow in popPupWindows:
+            # check if the element exist and click it 
+            try:
+                element  = self.driver.find_element_by_xpath(popPupWindow)
+                if element is not None :
+                    element.click()
+            except:
+                pass    
     
     def getProfileImage(self):
         imageElement = self.driver.find_element_by_xpath('//*[@id="content"]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[1]/div[3]/div[1]/div[1]/div/div[1]/div/div') 
@@ -76,6 +87,7 @@ class TinderBot():
         response = requests.get(imageUrl)
         image = Image.open(BytesIO(response.content))
         return image
+        
     #Internal function
     def _getURLFromStyle(self,completeImageString) :
         regularExpressionPattern = re.compile('(?<= url\(\")(.*)(?=\"\))')

@@ -56,14 +56,32 @@ class LoginWindow:
     def cancelButtonWasClicked(self):
         self.loginWindow.destroy()
 
+def getProfileImages(numberOfImages):
+    credentials = getCredentials()
+    tinderBot = TinderBot(credentials[0],credentials[1])
+    time.sleep(5)# wait the time to the page load
+    if numberOfImages < 0 :
+        while True :
+            tinderBot.closeUndermediateWindows()
+            saveProfileImage(tinderBot)
+            tinderBot.dislike()
+            time.sleep(1)# wait a second for continue
 
-def getProfileImages():
-    tinderBot = TinderBot('paoDeQueijoSobreRodas@gmail.com','paodequeijo2014')
+    else:
+        for i in range(numberOfImages):
+            tinderBot.closeUndermediateWindows()
+            saveProfileImage(tinderBot)
+            tinderBot.dislike()
+            time.sleep(1)# wait a second for continue
+   
+def saveProfileImage(tinderBot):
     profileImage = tinderBot.getProfileImage()
     pathToSaveImage = '../imagesForTrainingCNN/' + str(uuid.uuid1())  + '.jpg'
     profileImage.save(pathToSaveImage)
     
 
+def getCredentials():
+    return [line.rstrip() for line in open("../fakeProfile/credentials.txt", "r")]    
 
 def main():
     # loginWindow = LoginWindow()
@@ -74,7 +92,7 @@ def main():
     # else :
     #     tinderBot = TinderBot(loginWindow.login,loginWindow.password)
     # tinderBot = TinderBot('paoDeQueijoSobreRodas@gmail.com','paodequeijo2014')
-    getProfileImages()
+    getProfileImages(600)
  
 if __name__ == "__main__":
     main()
